@@ -10,32 +10,8 @@
 </head>
 
 <body class="container">
-    <h1 class="mt-5">Mini chat</h1>
+    <h1 class="mt-5">Band Names</h1>
     <hr>
-
-    <form id="miFormulario" action="">
-        <div class="row">
-            <div class="col-8">
-                <input type="text" id="txtMensaje" placeholder="mensaje" class="form-control">
-            </div>
-            <div class="col-4">
-                <button type="submit" class="btn btn-primary">
-                    Enviar
-                </button>
-            </div>
-        </div>
-    </form>
-
-    
-   <div class="row">
-       <div class="col">
-           <ul id="misMensajes" class="mt-2">
-             <!-- donde se insertan los mensajes del server -->
-           </ul>
-       </div>
-   </div>
-
-
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"
@@ -46,28 +22,9 @@
         const socket = io('http://localhost:3000')
 
 
-        //obtener referencia al formulario y mensajes
-        const formulario  = document.querySelector("#miFormulario");
-        const mensajes  = document.querySelector("#misMensajes");
-        const txtMensaje = document.querySelector("#txtMensaje")
-
-
-         //escuchamo el envento submit
-        formulario.addEventListener('submit',(ev)=>{
-            ev.preventDefault()
-
-            //recuperaos el mensaje
-            const nuevoMensaje= txtMensaje.value
-
-            //eviamos el mensaje
-            socket.emit('mensaje-to-server',{
-                msg:nuevoMensaje
-            })
-        })
-
         //recuperamos el mensaje del server
-        socket.on('mensaje-from-server',(data)=>{
-            mensajes.innerHTML += `<li>${data.msg}</li>`
+        socket.on('current-bands',(data)=>{
+            console.log(data)
         })
 
     

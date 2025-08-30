@@ -1,3 +1,4 @@
+const BandList = require("./band-list");
 
 
 
@@ -7,6 +8,10 @@ class Sockets {
 
         this.io = io;
 
+        //instacia de bandList
+        this.bandlist = new BandList()
+
+
         this.socketEvents();
     }
 
@@ -14,12 +19,18 @@ class Sockets {
         // On connection
         this.io.on('connection', ( socket ) => {
 
-            // Escuchar evento: mensaje-to-server
-            socket.on('mensaje-to-server', ( data ) => {
-                console.log( data );
-                
-                this.io.emit('mensaje-from-server', data );
-            });
+           console.log("cliente conectado")
+           //Emitir al cliete conectado todas las bands actuales
+
+            socket.emit("current-bands", this.bandlist.getBands())
+
+            
+            //votar por la banda
+            socket.on('votar-banda',(id)=>{
+                this.bandlist.increseVotes(id)
+                //enviamos la informacion actualizada
+                this.io.emit("current-bands", this.bandlist.getBands())
+            })
             
         
         });
