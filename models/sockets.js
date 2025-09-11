@@ -1,4 +1,5 @@
 const BandList = require("./band-list");
+const TicketList = require("./ticket-list");
 
 
 
@@ -52,6 +53,27 @@ class Sockets {
                 this.bandlist.changeName(id,name)
                 this.io.emit('current-bands',this.bandlist.getBands())
 
+            })
+
+            /**Evenntos para la seccion de tickets */
+            
+            //crear la instancia de nustro ticketList
+            this.ticketList = new TicketList()
+
+
+            socket.on('solicitar-ticket',(data, callback)=>{
+                const nuevoticket = this.ticketList.crearTicket()
+                callback(nuevoticket)
+            })
+
+            socket.on('siguiente-ticket-trabajar',(usuario,callback)=>{
+               const {agente,escritorio} = usuario
+               const suTicket = this.ticketList.asignarTicket(agente,escritorio)
+               
+               callback(suTicket)
+
+               //emitimos los ultimos 13 tickets
+               this.io.emit('ticket-asignado',this.ticketList.ultimos13)
             })
             
         
